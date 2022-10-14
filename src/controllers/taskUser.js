@@ -23,7 +23,7 @@ CtrlUser.postUser = async (req, res) => {
     const { username, password:passwordRecibida, email } = req.body;
     
     // Encriptar la contraseña del usuario
-    const newPassword = bcrypt.hashSync(passwordRecibida, 10);
+    const newPassword = bcrypt.hashSync(passwordRecibida, 5);
 
     // Se instancia un nuevo documento de MongoDB para luego ser guardado
     const newUser = new User({

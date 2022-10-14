@@ -31,7 +31,7 @@ app.use(express.json());
 
 app.use(require("./src/routes/tasksRoutes"));//ruta de usuarios
 app.use(require("./src/routes/usersRoutes"));//ruta de tareas
-app.use(require("./src/routes/authenticationRoutes"));
+app.use(require("./src/routes/authenticationRoutes"));//ruta de validacion de usuarios
 
 
 
