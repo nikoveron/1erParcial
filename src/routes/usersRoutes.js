@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const {getUser, postUser, putUser, deleteUser} = require("../controllers/taskUser");
+const {getUser, postUser, putUser, deleteUser} = require("../controllers/userControllers");
 const validarJWT = require("../middlewares/validateJWT")
 
 
