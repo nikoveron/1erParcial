@@ -20,7 +20,7 @@ CtrlUser.getUser = async (req, res) => {
 
 CtrlUser.postUser = async (req, res) => {
     try {
-    const { username, password:passwordRecibida, email } = req.body;
+    const { username, password:passwordRecibida } = req.body;
     
     // Encriptar la contraseña del usuario
     const newPassword = bcrypt.hashSync(passwordRecibida, 5);

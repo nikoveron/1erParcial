@@ -2,13 +2,12 @@
 const express = require('express');
 const cors = require("cors");
 const morgan = require("morgan");
-const path = require("path");
 require("dotenv").config();
 
 // Conexión a la base de datos
 const connectDB = require('./src/db/connectiondb');
 
-connectDB()
+connectDB();
 
 // Se inicializa la librería 
 
@@ -29,9 +28,9 @@ app.use(express.json());
 
 // Rutas
 
-app.use(require("./src/routes/tasksRoutes"));//ruta de usuarios
-app.use(require("./src/routes/usersRoutes"));//ruta de tareas
-app.use(require("./src/routes/authenticationRoutes"));//ruta de validacion de usuarios
+app.use(require("./src/routes/tasksRoutes"));
+app.use(require("./src/routes/usersRoutes"));
+app.use(require("./src/routes/authenticationRoutes"));
 
 
 

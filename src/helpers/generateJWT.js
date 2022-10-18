@@ -2,9 +2,9 @@ const { response } = require('express');
 const jwt = require('jsonwebtoken');
 
 const generar_jwt = (uid) => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => { 
 
-        jwt.sign(uid,process.env.SECRET,{
+        jwt.sign(uid,process.env.SECRET,{ 
             expiresIn: '24h'},
             (error, token) => {
                 if (error) {
@@ -15,5 +15,6 @@ const generar_jwt = (uid) => {
             }
         )
     });
-};
+}; 
+
 module.exports = generar_jwt;

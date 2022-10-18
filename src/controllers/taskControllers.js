@@ -1,4 +1,5 @@
 // Importamos el modelo
+const tasksModels = require("../models/tasksModels");
 const TaskModel = require("../models/tasksModels");
 // Inicializamos el objeto CtrlTask
 const ctrlTask = {};
@@ -12,7 +13,7 @@ ctrlTask.getTasks = async (req, res) => {
       Tasks,
     });
   } catch (error) {
-    console.log(`Error, no se pudo eliminar la tarea: ${error}`);
+    console.log(`Error, al encontrar la tarea: ${error}`);
   }
 };
 ctrlTask.getTasksByUser = async (req, res) => {
@@ -50,13 +51,19 @@ ctrlTask.postTask = async (req, res) => {
 ctrlTask.putTask = async (req, res) => {
   try {
     const id_task = req.params["idTask"];
+    const idUser=req.user
     const { title, description, isActive } = req.body;
     const TaskAmodificar = {
       title,
       description,
       isActive,
     };
-
+    if (TaskAmodificar.userId != idUser){
+      return res.json({
+        message: "No tienes permisos para modificar esta tarea.",
+      });
+    } 
+  
     const TaskModificada = await TaskModel.findByIdAndUpdate(
       id_task,
       TaskAmodificar
@@ -74,11 +81,13 @@ ctrlTask.putTask = async (req, res) => {
 ctrlTask.deleteTask = async (req, res) => {
   try {
     const id_task = req.params["idTask"];
+    
     TaskModel.findByIdAndDelete(id_task).exec();
     return res.json({
       message: "Tarea eliminada.",
       id_task,
-    });
+    }); 
+  
   } catch (error) {
     console.log(`Error, no se pudo eliminar la tarea: ${error}`);
   }

@@ -1,5 +1,5 @@
 const { response, request } = require('express');
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken'); 
 const Usuario = require('../models/usersModels');
 
 const validarJWT = async (req = request, res = response, next) => {
