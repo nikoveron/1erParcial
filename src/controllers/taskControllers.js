@@ -1,96 +1,72 @@
 // Importamos el modelo
-const tasksModels = require("../models/tasksModels");
+
 const TaskModel = require("../models/tasksModels");
 // Inicializamos el objeto CtrlTask
 const ctrlTask = {};
 
-ctrlTask.getTasks = async (req, res) => {
-  try {
-    const Tasks = await TaskModel.find();
+ctrlTask.getTasks = async (req, res) =>{
+  const obtenerTarea = await TaskModel.find({userId: req.user._id, isActive: true})
 
-    return res.json({
-      message: "Tareas Encontradas.",
-      Tasks,
-    });
-  } catch (error) {
-    console.log(`Error, al encontrar la tarea: ${error}`);
-  }
-};
+  res.json(obtenerTarea)
+}
+
+
 ctrlTask.getTasksByUser = async (req, res) => {
-  try {
-    const id = req.params.userId;
-    console.log(req.params);
-    const tasksUser = await TaskModel.find({ userId: id }, { description: 0 });
-    return res.json(tasksUser);
-  } catch (error) {
-    console.log(`Error, no se pudo obtener la tarea: ${error}`);
-  }
-};
+  const obtenerTarea = await TaskModel.find({userId: req.user._id, isActive: true})
+
+  res.json(obtenerTarea)
+}
+
+
 
 ctrlTask.postTask = async (req, res) => {
-  try {
-    const { title, description, isActive, userId } = req.body;
-    const newTask = new TaskModel({
+  const {title, description} = req.body
+
+  const nuevaTarea = new TaskModel({
       title,
       description,
-      isActive,
-      userId,
-    });
+      userId: req.user._id
+  })
 
-    const Task = await newTask.save();
+  const guardarTarea = await nuevaTarea.save();
 
-    return res.json({
-      message: "Tarea guardada correctamente.",
-      Task,
-    });
-  } catch (error) {
-    console.log(`Error, no se pudo guardar la tarea: ${error}`);
+  if(!guardarTarea){
+      res.json("No se pudo crear la tarea")
   }
-};
 
-ctrlTask.putTask = async (req, res) => {
-  try {
-    const id_task = req.params["idTask"];
-    const idUser=req.user
-    const { title, description, isActive } = req.body;
-    const TaskAmodificar = {
-      title,
-      description,
-      isActive,
-    };
-    if (TaskAmodificar.userId != idUser){
-      return res.json({
-        message: "No tienes permisos para modificar esta tarea.",
-      });
-    } 
+  res.json("Tarea creada")
+}
+
+ctrlTask.putTask = async (req, res) =>{
+  const {title, description} = req.body
+  const id = req.params.id
   
-    const TaskModificada = await TaskModel.findByIdAndUpdate(
-      id_task,
-      TaskAmodificar
-    );
-    return res.json({
-      message: "Tarea modificada:",
-      id_task,
-      TaskModificada,
-    });
-  } catch (error) {
-    res.status(404).send(`No se encuentra el ID: ${error}`);
+  const validacion = await TaskModel.findOne({userId:req.user._id, _id:id})
+  if(!validacion){
+      return res.json("No está autorizado");
   }
-};
+  const actualizarTarea = await TaskModel.findByIdAndUpdate(id, {title, description})
 
-ctrlTask.deleteTask = async (req, res) => {
-  try {
-    const id_task = req.params["idTask"];
-    
-    TaskModel.findByIdAndDelete(id_task).exec();
-    return res.json({
-      message: "Tarea eliminada.",
-      id_task,
-    }); 
-  
-  } catch (error) {
-    console.log(`Error, no se pudo eliminar la tarea: ${error}`);
+  if(!actualizarTarea){
+      res.json("No se pudo actualizar la tarea")
   }
-};
+
+  res.json("Tarea actualizada")
+}
+
+
+ctrlTask.deleteTask =  async (req,res) =>{
+  const id = req.params.id;
+
+  const validacion = await TaskModel.findOne({userId:req.user._id, _id:id})
+  if(!validacion){
+      return res.json("No está autorizado");
+  }
+
+  const eliminarTarea = await TaskModel.deleteOne({_id:id,userId:req.user._id})
+
+  res.json("Tarea eliminada")
+}
+
 
 module.exports = ctrlTask;

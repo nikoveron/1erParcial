@@ -10,9 +10,9 @@ TaskRouter.get('/task/:userId', validarJWT,getTasksByUser);
 
 TaskRouter.post('/task', validarJWT, postTask);
 
-TaskRouter.put('/task/:idTask', validarJWT, putTask);
+TaskRouter.put('/task/:id', validarJWT, putTask);
 
-TaskRouter.delete('/task/:idTask', validarJWT, deleteTask)
+TaskRouter.delete('/task/:id', validarJWT, deleteTask)
 
 
 
